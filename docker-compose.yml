@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  hyperf:
+    container_name: hyperf
+    image: hyperf/hyperf:8.2-alpine-v3.18-swoole-v5
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - 9501:9501
+    depends_on:
+      - hyperf-mariadb
+      - hyperf-redis
+
+  hyperf-mariadb:
+    container_name: hyperf-mariadb
+    image: mariadb:latest
+    volumes:
+      - ./.docker/mariadb:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: "database"
+
+  hyperf-redis:
+    container_name: hyperf-redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
